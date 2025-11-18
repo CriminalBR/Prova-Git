@@ -1,0 +1,36 @@
+name: 2. Deploy no GitHub Pages (Auto + Manual)
+
+on:
+  # GATILHO 1: Automático quando houver push no index.html
+  push:
+    branches:
+      - main  # Ou o nome do seu branch principal
+    paths:
+      - 'index.html' # Só roda se o index.html for modificado
+  
+  # GATILHO 2: O botão manual que já tínhamos
+  workflow_dispatch:
+
+# O resto do arquivo é idêntico
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+      
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Fazer upload do artefato
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' 
+
+      - name: Deploy no GitHub Pages
+        uses: actions/deploy-pages@v4
